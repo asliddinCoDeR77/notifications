@@ -10,10 +10,10 @@ class LocalNotificarionsServices {
   static bool notificationsEnabled = false;
 
   static Future<void> requestPermission() async {
-    //Birinchi dasturimiz qaysi qurilmada run bo'layatganini tekshiramiz
+    
     if (Platform.isIOS || Platform.isMacOS) {
-      //Agar IOS bo'lsa unda
-      //shu kod orqali notification' ga ruxsat so'raymiz
+      
+      
 
       notificationsEnabled = await _localNotification
               .resolvePlatformSpecificImplementation<
@@ -25,8 +25,8 @@ class LocalNotificarionsServices {
               ) ??
           false;
 
-      //Agar MacOS bo'lsa unda
-      //shu kod orqali notification' ga ruxsat so'raymiz
+      
+      
       await _localNotification
           .resolvePlatformSpecificImplementation<
               MacOSFlutterLocalNotificationsPlugin>()
@@ -36,32 +36,32 @@ class LocalNotificarionsServices {
             sound: true,
           );
     } else if (Platform.isAndroid) {
-      //Agar MacOS bo'lsa unda
-      //shu kod orqali notification' ga ruxsat so'raymiz
+      
+      
       final androidImplementation =
           _localNotification.resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>();
 
-      //va bu yerda darhol xabarnaomasiga ruxsat so'raymiz
+      
       final bool? grantedNotificationPermission =
           await androidImplementation?.requestExactAlarmsPermission();
 
-      //bu yerda esa rejali xabarnomage ruxsat so'raymiz
+      
       final bool? grantedScheduledNotificationPermission =
           await androidImplementation?.requestExactAlarmsPermission();
-      //bu yerda o'zgaruvchiga belgilab qo'yapmiz foydalanuvchi ruxsat berdimi
+      
       notificationsEnabled = grantedNotificationPermission ?? false;
       notificationsEnabled = grantedScheduledNotificationPermission ?? false;
     }
   }
 
   static Future<void> start() async {
-    //hozirgi joylashuv (timesone) bilan vaqtni oladi.
+    
     final currentTimeZone = await FlutterTimezone.getLocalTimezone();
     tzl.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation(currentTimeZone));
 
-    //android va IOS uchun sozlamalarni to'g'irlaymiz
+    
     const androidInit = AndroidInitializationSettings("mipmap/ic_launcher");
     final iosInit = DarwinInitializationSettings(
       notificationCategories: [
@@ -91,27 +91,27 @@ class LocalNotificarionsServices {
       ],
     );
 
-    //umumiy sozlamalarga elon qilaman
+    
     final notificationInit = InitializationSettings(
       android: androidInit,
       iOS: iosInit,
     );
 
-    //va FlutterLocalNotification klasiga sozlamalarni yuboraman
-    // u esa kerakli qurilma sozlamalarini to'g'irlaydi
+    
+    
     await _localNotification.initialize(notificationInit);
   }
 
   static void showNotification() async {
-    // android va ios uchun qanday
-    // turdagi xabarlarni ko'rsatish kerakligni aytamiz
+    
+    
     const androidDetails = AndroidNotificationDetails(
       "goodChannelId",
       "goodChannelName",
       importance: Importance.max,
       priority: Priority.max,
       playSound: true,
-      // sound: RawResourceAndroidNotificationSound("notification"),
+      
       actions: [
         AndroidNotificationAction('id_1', 'Action 1'),
         AndroidNotificationAction('id_2', 'Action 2'),
@@ -129,7 +129,7 @@ class LocalNotificarionsServices {
       iOS: iosDetails,
     );
 
-    // show funksiyasi orqali darhol xabarnoma ko'rsatamiz
+    
     await _localNotification.show(
       0,
       "Birinchi NOTIFICATION",
@@ -139,8 +139,8 @@ class LocalNotificarionsServices {
   }
 
   static void showScheduledNotification() async {
-    // android va ios uchun qanday
-    // turdagi xabarlarni ko'rsatish kerakligni aytamiz
+    
+    
     const androidDetails = AndroidNotificationDetails(
       "goodChannelId",
       "goodChannelName",
@@ -160,10 +160,10 @@ class LocalNotificarionsServices {
       iOS: iosDetails,
     );
 
-    // show funksiyasi orqali darhol xabarnoma ko'rsatamiz
+    
     await _localNotification.zonedSchedule(
       0,
-      "Birinchi NOTIFICATION",
+      "FIRST NOTIFICATION",
       "Salom sizga \$1,000,000 pul tushdi. SMS kodni ayting!",
       tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
       notificationDetails,
@@ -174,8 +174,8 @@ class LocalNotificarionsServices {
   }
 
   static void showPeriodicNotification(String time) async {
-    // android va ios uchun qanday
-    // turdagi xabarlarni ko'rsatish kerakligni aytamiz
+    
+    
     const androidDetails = AndroidNotificationDetails(
       "goodChannelId",
       "goodChannelName",
@@ -195,20 +195,20 @@ class LocalNotificarionsServices {
       iOS: iosDetails,
     );
 
-    // show funksiyasi orqali darhol xabarnoma ko'rsatamiz
+    
     await _localNotification.periodicallyShowWithDuration(
       0,
       "Mativation time...",
       "Mativatsiya olish vahti bo'ldi ):",
       Duration(minutes: int.parse(time)),
       notificationDetails,
-      payload: "Mativatsiya bu bekorchilik (:",
+      payload: "Mativatsiya  (:",
     );
   }
 
   static void pamidorShowPeriodicNotification(String timePamidor) async {
-    // android va ios uchun qanday
-    // turdagi xabarlarni ko'rsatish kerakligni aytamiz
+    
+    
     const androidDetails = AndroidNotificationDetails(
       "goodChannelId",
       "goodChannelName",
@@ -232,14 +232,13 @@ class LocalNotificarionsServices {
       iOS: iosDetails,
     );
 
-    // show funksiyasi orqali darhol xabarnoma ko'rsatamiz
+    
     await _localNotification.periodicallyShowWithDuration(
       0,
       "Dam olish vaqti...):",
-      "Sen ham bir odamga o'xshab dam ol (:",
       Duration(minutes: int.parse(timePamidor)),
       notificationDetails,
-      payload: "Miyya temirdan emas bolakay (:",
+      payload: "Dam ol",
     );
   }
 }
