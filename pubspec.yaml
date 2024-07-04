@@ -1,0 +1,25 @@
+name: notifications
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.4 <4.0.0'
+
+dependencies:
+  audioplayers: ^6.0.0
+  flutter:
+    sdk: flutter
+  flutter_local_notifications: ^17.2.1
+  flutter_timezone: ^1.0.8
+  http: ^1.2.1
+  timezone: ^0.9.4
+  zoom_tap_animation: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
